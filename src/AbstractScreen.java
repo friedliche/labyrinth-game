@@ -13,6 +13,12 @@ public abstract class AbstractScreen  extends JPanel {
         setBackground(Color.BLACK);
     }
 
+    public AbstractScreen(GridBagLayout gbl, int topPadding, int sitePadding){
+        super(gbl);
+        setBorder(new EmptyBorder(topPadding, sitePadding, 0, sitePadding));
+        setBackground(Color.BLACK);
+    }
+
     public void setGBCForTitle(GridBagConstraints gbc){
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridwidth = GridBagConstraints.REMAINDER;
@@ -48,7 +54,7 @@ public abstract class AbstractScreen  extends JPanel {
     }
 
     public Dimension getPreferredSize(){
-        return new Dimension(1150, 760);
+        return new Dimension(1200, 760);
     }
 
     public void setSupportedButtons(String[] buttons){
