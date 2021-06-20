@@ -1,13 +1,12 @@
 import javax.swing.*;
 import java.awt.*;
 
+import static helper.Constants.*;
+
 public class UpperBar extends JPanel {
 
     private LifeHeart[] lifeHearts;
     private Key[] keys;
-
-    private final int HEART_COUNT = 3;
-    private final int KEY_COUNT = 3;
 
     private int currHeartCount = 3;
     private int currKeyCount = 0;
@@ -34,7 +33,7 @@ public class UpperBar extends JPanel {
         try {
 
             for (int i = 0; i < KEY_COUNT; i++) {
-                keys[i] = new Key(scaleImage);
+                keys[i] = new Key(scaleImage, false);
                 gbc.gridx = i;
                 add(keys[i], gbc);
             }
@@ -46,7 +45,7 @@ public class UpperBar extends JPanel {
                 gbc.insets = new Insets(0, 20, 0, 0);
 
                 }
-                lifeHearts[i] = new LifeHeart(scaleImage);
+                lifeHearts[i] = new LifeHeart(scaleImage, false);
                 gbc.gridx = i + 3;
                 add(lifeHearts[i], gbc);
 
@@ -57,12 +56,30 @@ public class UpperBar extends JPanel {
         }
     }
 
+    public void updateUpperBar(Collectable collectable){
+        if (collectable instanceof Key){
+            addKey();
+        } else {
+            if (collectable instanceof LifeHeart && currHeartCount < 3){
+                addHeart();
+            }
+        }
+    }
+
     public void deleteHeart(){
         lifeHearts[--currHeartCount].delete();
     }
 
+    public void deleteKey(){
+        keys[--currKeyCount].delete();
+    }
+
     public void addKey(){
         keys[currKeyCount++].add();
+    }
+
+    public void addHeart(){
+        lifeHearts[currHeartCount++].add();
     }
 
     public int getWidthHearts(){

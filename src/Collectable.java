@@ -1,19 +1,25 @@
+import helper.Tuple;
+
 import javax.swing.*;
 import java.awt.*;
 
-public abstract class Collectable extends JLabel {
+public abstract class Collectable extends JComponent {
 
     private String imagePath;
     private String imageHidePath;
     private ImageIcon image;
     private int scaleImage;
+    private boolean inGameBoard; // collectable or not
+
+    private Tuple<Integer, Integer> position;
+    private Tuple<Integer, Integer> positionVisual;
 
 
-    public Collectable(int scaleImage, String imagePath, String imageHidePath, boolean showHidden){
+    public Collectable(int scaleImage, String imagePath, String imageHidePath, boolean showHidden, boolean inGameBoard){
         this.imagePath = imagePath;
 
         String firstVisiblePath;
-        if (showHidden)
+        if (showHidden && !inGameBoard)
             firstVisiblePath = imageHidePath;
         else
             firstVisiblePath = imagePath;
@@ -22,7 +28,28 @@ public abstract class Collectable extends JLabel {
         this.image = new ImageIcon(scaledImage);
         this.scaleImage = scaleImage;
         this.imageHidePath = imageHidePath;
+        this.inGameBoard = inGameBoard;
+
+        position = new Tuple<>(0, 0);
+        positionVisual = new Tuple<>(0, 0);
     }
+
+    public Tuple<Integer, Integer> getPosition() {
+        return position;
+    }
+
+    public void setPosition(Tuple<Integer, Integer> position) {
+        this.position.setX(position.getX());
+        this.position.setY(position.getY());
+    }
+
+    public Tuple<Integer, Integer> getPositionVisual() {
+        return positionVisual;
+    }
+
+    public void setPositionVisual(Tuple<Integer, Integer> positionVisual) {
+        this.positionVisual.setX(positionVisual.getX());
+        this.positionVisual.setY(positionVisual.getY());    }
 
     public String getImagePath() {
         return imagePath;
@@ -49,22 +76,33 @@ public abstract class Collectable extends JLabel {
     }
 
     public void add(){
-        Image image = new ImageIcon(imagePath).getImage();
-        Image scaledImage = image.getScaledInstance(this.getScaleImage(), this.getScaleImage(), 1);
-        this.image = new ImageIcon(scaledImage);
+        if (inGameBoard) {
+            this.image = new ImageIcon("src/resources/pics/empty.png");
+        }else {
+            Image image = new ImageIcon(imagePath).getImage();
+            Image scaledImage = image.getScaledInstance(this.getScaleImage(), this.getScaleImage(), 1);
+            this.image = new ImageIcon(scaledImage);
+        }
+        repaint();
     }
 
     public void delete(){
-        Image image = new ImageIcon(imageHidePath).getImage();
-        Image scaledImage = image.getScaledInstance(this.getScaleImage(), this.getScaleImage(), 1);
-        this.image = new ImageIcon(scaledImage);
+        if (inGameBoard) {
+            this.image = new ImageIcon("src/resources/pics/empty.png");
+
+        }else{
+            Image image = new ImageIcon(imageHidePath).getImage();
+            Image scaledImage = image.getScaledInstance(this.getScaleImage(), this.getScaleImage(), 1);
+            this.image = new ImageIcon(scaledImage);
+        }
+        repaint();
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        this.getImage().paintIcon(this, g, 0, 0);
+        this.getImage().paintIcon(this, g, positionVisual.getY(), positionVisual.getX());
     }
 
     public Dimension getPreferredSize(){

@@ -10,14 +10,21 @@ import helper.Tuple;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+import static helper.Constants.KEY_COUNT;
 
 public class GameBoard extends JLayeredPane {
 
     private Grid grid;
     private Player player;
+
     private DrawWindow currWindow;
     private int borderTop;
 
+    private Map<Collectable, Tuple<Integer, Integer>> collectablesPositions;
 
     public GameBoard(int width, int height){
 
@@ -33,6 +40,21 @@ public class GameBoard extends JLayeredPane {
         player = new Player(Color.CYAN,startPosition, 45);
         player.setBounds(startPosition.getX(), startPosition.getY(), 1100, 680);
         add(player, Integer.valueOf(2));
+
+        collectablesPositions = new HashMap<>();
+        for (int i = 0; i < KEY_COUNT; i++){
+            Collectable collectable = new Key(27, true);
+            collectable.setBounds(0, 0, 1100, 680);
+            collectablesPositions.put(collectable, collectable.getPosition());
+            add(collectable, Integer.valueOf(4));
+        }
+
+        for (int i = 0; i < 1; i++){
+            Collectable collectable = new LifeHeart(22, true);
+            collectable.setBounds(0, 0, 1100, 680);
+            collectablesPositions.put(collectable, collectable.getPosition());
+            add(collectable, Integer.valueOf(4));
+        }
     }
 
     private void createMaze(int width, int height){
@@ -49,10 +71,26 @@ public class GameBoard extends JLayeredPane {
         add(grid, Integer.valueOf(1));
     }
 
-    public void decideToMovePlayer(int direction){
+    public Collectable decideToMovePlayer(int direction){
         // check for walls
-        if (isNextStepPath(direction))
+        if (isNextStepPath(direction)) {
             movePlayerTo(direction);
+
+            if (collectablesPositions.containsValue(player.getPosition())){
+
+                Iterator<Map.Entry<Collectable, Tuple<Integer, Integer>>> iterator = collectablesPositions.entrySet().iterator();
+                while (iterator.hasNext()) {
+                    Map.Entry<Collectable, Tuple<Integer, Integer>> entry = iterator.next();
+                    if(player.getPosition().equals(entry.getValue())){
+                        Collectable out = entry.getKey();
+                        out.delete();
+                        iterator.remove();
+                        return out;
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     private void movePlayerTo(int direction){
