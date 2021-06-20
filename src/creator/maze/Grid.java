@@ -1,7 +1,9 @@
 package creator.maze;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -11,7 +13,7 @@ import java.util.Random;
 import static helper.Constants.*;
 
 
-public class Grid {
+public class Grid extends JComponent {
 
     private int width, height;
     private Cell[][] grid;
@@ -149,6 +151,52 @@ public class Grid {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void paintComponent(Graphics g){
+        super.paintComponent(g);
+
+        int upShift = 0;
+
+        int cellSize = 60; // size of wall lift/above & right/bottom included: 30
+        int halfWallSize = 15;
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setColor(Color.WHITE);
+
+        for(int row = 0; row < this.height; row++){
+            int y1 = row * cellSize;
+            int y2 = (row + 1) * cellSize;
+
+            int leftShift = 0;
+
+            for(int col = 0; col < this.width; col++){
+                int x1 = col * cellSize;
+                int x2 = (col + 1) * cellSize;
+
+                Grid.Cell currCell = this.getCellAt(row, col);
+
+                if (!(currCell.isLinked(currCell.getNeighbor(W))))
+                    g2d.fill(new Rectangle2D.Double(x1 - leftShift, y1 - upShift, halfWallSize, cellSize));
+
+                if (!(currCell.isLinked(currCell.getNeighbor(N))))
+                    g2d.fill(new Rectangle2D.Double(x1 - leftShift, y1 - upShift, cellSize, halfWallSize));
+
+                if (!(currCell.isLinked(currCell.getNeighbor(S))))
+                    g2d.fill(new Rectangle2D.Double(x1  - leftShift, y2 - upShift - 15, cellSize, halfWallSize));
+
+                if (!(currCell.isLinked(currCell.getNeighbor(E))))
+                    g2d.fill(new Rectangle2D.Double(x2 - leftShift - 15, y1 - upShift, halfWallSize, cellSize));
+
+                leftShift += 15;
+            }
+            upShift += 15;
+        }
+        g2d.dispose();
+    }
+
+    public Dimension getPreferredSize(){
+        return new Dimension(1000, 500);
     }
 
     public class Cell {
