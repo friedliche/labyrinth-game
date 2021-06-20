@@ -1,5 +1,7 @@
 package creator.maze;
 
+import helper.Tuple;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -151,6 +153,15 @@ public class Grid extends JComponent {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean isLinkIn(Tuple<Integer, Integer> currentPlayerPosition, int direction){
+        int x = currentPlayerPosition.getX();
+        int y = currentPlayerPosition.getY();
+
+        Cell currentCell = this.getCellAt(x, y);
+
+        return currentCell.isLinked(currentCell.getNeighbor(direction));
     }
 
     @Override

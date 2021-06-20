@@ -29,8 +29,9 @@ public class GameBoard extends JLayeredPane {
         // initialize sliding window
         this.currWindow = new DrawWindow(new Tuple<>(0, 0), width, height);
 
-        player = new Player(Color.CYAN, new Tuple<>(20, 20));
-        player.setBounds(20, 20, 60, 60);
+        Tuple<Integer, Integer> startPosition =  new Tuple<>(10, 20);
+        player = new Player(Color.CYAN,startPosition, 45);
+        player.setBounds(startPosition.getX(), startPosition.getY(), 1100, 680);
         add(player, Integer.valueOf(2));
     }
 
@@ -44,8 +45,22 @@ public class GameBoard extends JLayeredPane {
         this.grid = new Grid(width, height);
         BinaryTree.on(this.grid); // using BinaryTree
 
-        grid.setBounds(0, 20, 1100, 700);
+        grid.setBounds(0, 20, 1100, 680);
         add(grid, Integer.valueOf(1));
+    }
+
+    public void decideToMovePlayer(int direction){
+        // check for walls
+        if (isNextStepPath(direction))
+            movePlayerTo(direction);
+    }
+
+    private void movePlayerTo(int direction){
+        player.moveOneStepTo(direction);
+    }
+
+    private boolean isNextStepPath(int direction){
+        return grid.isLinkIn(player.getPosition(), direction);
     }
 
     public Dimension getPreferredSize(){

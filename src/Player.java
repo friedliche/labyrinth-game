@@ -1,3 +1,4 @@
+import helper.Constants;
 import helper.Tuple;
 
 import javax.swing.*;
@@ -6,28 +7,56 @@ import java.awt.*;
 public class Player extends JComponent {
 
     private Color color;
-    private Tuple<Integer, Integer> position; // position in grid (= game board)
+    private Tuple<Integer, Integer> positionVisual;
+    private Tuple<Integer, Integer> position; // position in grid
     private int scale;
+    private int stepSize;
 
-    private int width, height;
-
-    public Player(Color color, Tuple<Integer, Integer> position){
+    public Player(Color color, Tuple<Integer, Integer> positionVisual, int stepSize){
         this.color = color;
-        this.position = position;
-        this.scale = 150;
+        this.positionVisual = positionVisual;
+        this.position = new Tuple<>(0, 0);
+        this.scale = 20;
+        this.stepSize = stepSize;
+    }
 
-        this.width = this.scale;
-        this.height = this.scale;
+    public Tuple<Integer, Integer> getPositionVisual() {
+        return positionVisual;
+    }
+
+    public Tuple<Integer, Integer> getPosition() {
+        return position;
+    }
+
+    public void moveOneStepTo(int direction){
+        switch(direction){
+            case Constants.N:
+                positionVisual.setY(positionVisual.getY() - this.stepSize);
+                position.setX(position.getX() - 1);
+                break;
+            case Constants.S:
+                positionVisual.setY(positionVisual.getY() + this.stepSize);
+                position.setX(position.getX() + 1);
+                break;
+            case Constants.E:
+                positionVisual.setX(positionVisual.getX() + this.stepSize);
+                position.setY(position.getY() + 1);
+                break;
+            case Constants.W:
+                positionVisual.setX(positionVisual.getX() - this.stepSize);
+                position.setY(position.getY() - 1);
+                break;
+            default:
+                System.err.println("Unsupported movement");
+                System.exit(-1);
+        }
+        repaint();
     }
 
     protected void paintComponent(Graphics g){
         super.paintComponent(g);
 
         g.setColor(this.color);
-        g.fillRect(position.getX(), position.getY(), this.scale, this.scale);
-    }
-
-    public Dimension getPreferredSize(){
-        return new Dimension(this.scale, this.scale);
+        g.fillRect(positionVisual.getX(), positionVisual.getY(), this.scale, this.scale);
     }
 }
