@@ -20,6 +20,7 @@ public class DynamicEnemy extends JComponent  implements Runnable{
     private Tuple<Integer, Integer> specificOffset;
     private Random rand;
     private volatile boolean stop;
+    private boolean isHarmless;
 
     public DynamicEnemy(Color color, Grid grid, Player player){
         this.color = color;
@@ -28,6 +29,7 @@ public class DynamicEnemy extends JComponent  implements Runnable{
         this.scale = 20;
         this.stepSize = 45;
         this.stop = false;
+        this.isHarmless = true;
 
         specificOffset = new Tuple<>(10, 20);
         rand = new Random();
@@ -44,7 +46,6 @@ public class DynamicEnemy extends JComponent  implements Runnable{
         if (!stop){
             decideToMove();
             if (collisionWithPlayer()){
-                System.out.println("Collision!");
                 reactToPlayerCollision();
             }
             repaint();
@@ -79,9 +80,14 @@ public class DynamicEnemy extends JComponent  implements Runnable{
         return this.player.getPosition().equals(this.position);
     }
 
+    public boolean getIsHarmless(){
+        return this.isHarmless;
+    }
+
     public void reactToPlayerCollision(){
         player.getInventory().deleteHeart();
         this.color = new Color(1, 1, 1, 0);
+        this.isHarmless = false;
         stop();
     }
 

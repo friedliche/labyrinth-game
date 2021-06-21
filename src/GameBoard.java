@@ -110,9 +110,11 @@ public class GameBoard extends JLayeredPane {
             for(int i = 0; i < DYNAMIC_ENEMY_COUNT; i++) {
                 if (dynamicEnemies[i]!=null && dynamicEnemies[i].getPosition().equals(this.player.getPosition())){
                     remove(dynamicEnemies[i]);
-                    dynamicEnemies[i].reactToPlayerCollision();
-                    dynamicEnemies[i] = null;
-                    player.handleEnemyCollision();
+                    if (dynamicEnemies[i].getIsHarmless()){
+                        dynamicEnemies[i].reactToPlayerCollision();
+                        dynamicEnemies[i] = null;
+                        player.handleEnemyCollision();
+                    }
                 }
             }
         }
