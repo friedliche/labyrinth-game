@@ -65,4 +65,8 @@ public class Player extends JComponent{
         g.setColor(this.color);
         g.fillRect(positionVisual.getX(), positionVisual.getY(), this.scale, this.scale);
     }
+
+    public void handleEnemyCollision() {
+
+    }
 }

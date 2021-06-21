@@ -51,6 +51,10 @@ public class DynamicEnemy extends JComponent  implements Runnable{
         }
     }
 
+    public Tuple<Integer, Integer> getPosition() {
+        return position;
+    }
+
     protected void paintComponent(Graphics g){
         super.paintComponent(g);
 
@@ -75,12 +79,14 @@ public class DynamicEnemy extends JComponent  implements Runnable{
         return this.player.getPosition().equals(this.position);
     }
 
-    private void reactToPlayerCollision(){
-
+    public void reactToPlayerCollision(){
         player.getInventory().deleteHeart();
-        this.color = Color.BLACK;
+        this.color = new Color(1, 1, 1, 0);
+        stop();
+    }
+
+    public void stop(){
         this.stop = true;
-        repaint();
     }
 
 }
