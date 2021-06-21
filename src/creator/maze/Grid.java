@@ -34,7 +34,7 @@ public class Grid extends JComponent {
         grid = new Cell[height][width];
         for (int row = 0; row < height; row++){
             for(int col = 0; col < width; col++){
-                grid[row][col] = new Cell();
+                grid[row][col] = new Cell(col, row);
             }
         }
     }
@@ -214,10 +214,17 @@ public class Grid extends JComponent {
 
         private Cell[] neighbors; // N, S, E, W
         private ArrayList<Cell> linkedCells; // cells, to which passage exists
+        private int row, col;
 
-        public Cell() {
+        public Cell(int col, int row) {
             neighbors = new Cell[4];
             linkedCells = new ArrayList<>();
+            this.row = row;
+            this.col = col;
+        }
+
+        public Tuple<Integer, Integer> getPosition(){
+            return new Tuple<>(col, row);
         }
 
         public ArrayList<Cell> getLinkedCells() {

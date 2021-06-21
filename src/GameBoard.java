@@ -13,18 +13,22 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
+import static helper.Constants.DYNAMIC_ENEMY_COUNT;
 import static helper.Constants.KEY_COUNT;
 
 public class GameBoard extends JLayeredPane {
 
     private Grid grid;
     private Player player;
+    private DynamicEnemy[] dynamicEnemies;
+    private Map<Collectable, Tuple<Integer, Integer>> collectablesPositions;
 
     private DrawWindow currWindow;
     private int borderTop;
-
-    private Map<Collectable, Tuple<Integer, Integer>> collectablesPositions;
 
     public GameBoard(int width, int height){
 
@@ -40,6 +44,15 @@ public class GameBoard extends JLayeredPane {
         player = new Player(Color.CYAN,startPosition, 45);
         player.setBounds(startPosition.getX(), startPosition.getY(), 1100, 680);
         add(player, Integer.valueOf(2));
+
+        dynamicEnemies = new DynamicEnemy[DYNAMIC_ENEMY_COUNT];
+        ScheduledExecutorService executor = Executors.newScheduledThreadPool(DYNAMIC_ENEMY_COUNT);
+        for (int i = 0; i < DYNAMIC_ENEMY_COUNT; i++){
+            dynamicEnemies[i] = new DynamicEnemy(Color.GREEN, this.grid, this.player);
+            dynamicEnemies[i].setBounds(startPosition.getX(), startPosition.getY(),  1100, 680);
+            add(dynamicEnemies[i], Integer.valueOf(4));
+            executor.scheduleAtFixedRate(dynamicEnemies[i], 0, 1, TimeUnit.SECONDS);
+        }
 
         collectablesPositions = new HashMap<>();
         for (int i = 0; i < KEY_COUNT; i++){
@@ -75,6 +88,7 @@ public class GameBoard extends JLayeredPane {
         // check for walls
         if (isNextStepPath(direction)) {
             movePlayerTo(direction);
+
 
             if (collectablesPositions.containsValue(player.getPosition())){
 
