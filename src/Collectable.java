@@ -102,7 +102,7 @@ public abstract class Collectable extends JComponent {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        this.getImage().paintIcon(this, g, positionVisual.getY(), positionVisual.getX());
+        this.getImage().paintIcon(this, g, positionVisual.getX(), positionVisual.getY());
     }
 
     public Dimension getPreferredSize(){

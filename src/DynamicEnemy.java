@@ -19,7 +19,7 @@ public class DynamicEnemy extends JComponent  implements Runnable{
     private int stepSize;
     private Tuple<Integer, Integer> specificOffset;
     private Random rand;
-    private boolean isPathInMoveDirection;
+    private volatile boolean stop;
 
     public DynamicEnemy(Color color, Grid grid, Player player){
         this.color = color;
@@ -27,8 +27,8 @@ public class DynamicEnemy extends JComponent  implements Runnable{
         this.player = player;
         this.scale = 20;
         this.stepSize = 45;
+        this.stop = false;
 
-        isPathInMoveDirection = false;
         specificOffset = new Tuple<>(10, 20);
         rand = new Random();
         int x = rand.nextInt(GAME_BOARD_WIDTH);
@@ -40,8 +40,15 @@ public class DynamicEnemy extends JComponent  implements Runnable{
 
     @Override
     public void run() {
-        decideToMove();
-        repaint();
+
+        if (!stop){
+            decideToMove();
+            if (collisionWithPlayer()){
+                System.out.println("Collision!");
+                reactToPlayerCollision();
+            }
+            repaint();
+        }
     }
 
     protected void paintComponent(Graphics g){
@@ -51,9 +58,9 @@ public class DynamicEnemy extends JComponent  implements Runnable{
         g.fillOval(positionVisual.getX(), positionVisual.getY(), this.scale, this.scale);
     }
 
-    public void decideToMove(){
+    private void decideToMove(){
 
-        ArrayList<Grid.Cell> possiblePaths =  this.grid.getCellAt(position.getY(), position.getX()).getLinkedCells();
+        ArrayList<Grid.Cell> possiblePaths =  this.grid.getCellAt(position.getX(), position.getY()).getLinkedCells();
 
         int index = rand.nextInt(possiblePaths.size());
         Tuple<Integer, Integer> nextPosition = possiblePaths.get(index).getPosition();
@@ -63,4 +70,17 @@ public class DynamicEnemy extends JComponent  implements Runnable{
         this.position.setX(nextPosition.getX());
         this.position.setY(nextPosition.getY());
     }
+
+    private boolean collisionWithPlayer(){
+        return this.player.getPosition().equals(this.position);
+    }
+
+    private void reactToPlayerCollision(){
+
+        player.getInventory().deleteHeart();
+        this.color = Color.BLACK;
+        this.stop = true;
+        repaint();
+    }
+
 }

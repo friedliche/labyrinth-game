@@ -13,7 +13,7 @@ public class BinaryTree{
         for (int row = 0; row < grid.getGridHeight(); row++){
             for ( int col = 0; col < grid.getGridWidth(); col++){
 
-                Grid.Cell curCell = grid.getCellAt(row, col);
+                Grid.Cell curCell = grid.getCellAt(col, row);
                 ArrayList<Grid.Cell> neighbors = new ArrayList<>();
 
                 // if not at wall or corner

@@ -31,10 +31,10 @@ public class Grid extends JComponent {
     }
 
     public void prepareGrid(){
-        grid = new Cell[height][width];
+        grid = new Cell[width][height];
         for (int row = 0; row < height; row++){
             for(int col = 0; col < width; col++){
-                grid[row][col] = new Cell(col, row);
+                grid[col][row] = new Cell(col, row);
             }
         }
     }
@@ -43,13 +43,13 @@ public class Grid extends JComponent {
         for (int row = 0; row < height; row++){
             for(int col = 0; col < width; col++){
                 if (row - 1 >= 0)
-                    grid[row][col].setNeighbor(grid[row-1][col], N);
+                    grid[col][row].setNeighbor(grid[col][row-1], N);
                 if (row + 1 < height)
-                    grid[row][col].setNeighbor(grid[row+1][col], S);
+                    grid[col][row].setNeighbor(grid[col][row+1], S);
                 if (col - 1 >= 0)
-                    grid[row][col].setNeighbor(grid[row][col-1], W);
+                    grid[col][row].setNeighbor(grid[col-1][row], W);
                 if (col + 1 < width)
-                    grid[row][col].setNeighbor(grid[row][col+1], E);
+                    grid[col][row].setNeighbor(grid[col+1][row], E);
             }
         }
     }
@@ -62,15 +62,15 @@ public class Grid extends JComponent {
         return this.width;
     }
 
-    public Cell getCellAt(int row, int col){
-        return this.grid[row][col];
+    public Cell getCellAt(int col, int row){
+        return this.grid[col][row];
     }
 
 
     public Cell getRandomCell(){
         int rndRow = random.nextInt(this.height);
         int rndCol = random.nextInt(this.width);
-        return grid[rndRow][rndCol];
+        return grid[rndCol][rndRow];
     }
 
     public String contentsOf(Cell cell){
@@ -87,7 +87,7 @@ public class Grid extends JComponent {
             StringBuilder bottom = new StringBuilder("+");
 
             for(int col = 0; col < width; col++){
-                Cell curCell = getCellAt(row, col);
+                Cell curCell = getCellAt(col, row);
                 if (curCell == null) {
                     System.err.println("This cell is not initialized");
                     System.exit(1);
@@ -129,7 +129,7 @@ public class Grid extends JComponent {
                 int x1 = col * cellSize;
                 int x2 = (col + 1) * cellSize;
 
-                Cell currCell = getCellAt(row, col);
+                Cell currCell = getCellAt(col, row);
 
                 if (!(currCell.isLinked(currCell.getNeighbor(W))))
                     g2d.drawLine(x1, y1, x1, y2);
@@ -185,7 +185,7 @@ public class Grid extends JComponent {
                 int x1 = col * cellSize;
                 int x2 = (col + 1) * cellSize;
 
-                Grid.Cell currCell = this.getCellAt(row, col);
+                Grid.Cell currCell = this.getCellAt(col, row);
 
                 if (!(currCell.isLinked(currCell.getNeighbor(W))))
                     g2d.fill(new Rectangle2D.Double(x1 - leftShift, y1 - upShift, halfWallSize, cellSize));

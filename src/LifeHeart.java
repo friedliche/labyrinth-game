@@ -12,14 +12,14 @@ public class LifeHeart extends Collectable {
     public LifeHeart(int scaleImage, boolean inGameBoard){
         super(scaleImage, "src/resources/pics/heart.png", "src/resources/pics/heartHide.png", false, inGameBoard);
 
-        specificOffset = new Tuple<>(19, 38);
+        specificOffset = new Tuple<>(38, 19);
         if (inGameBoard){
             Random rand = new Random();
             int randCol = rand.nextInt(GAME_BOARD_WIDTH);
             int randRow = rand.nextInt(GAME_BOARD_HEIGHT);
 
-            setPosition(new Tuple<>(randRow, randCol));
-            setPositionVisual(new Tuple<>(randRow * 45 + specificOffset.getY(), randCol * 45 + specificOffset.getX()));
+            setPosition(new Tuple<>(randCol, randRow));
+            setPositionVisual(new Tuple<>(randCol * 45 + specificOffset.getY(), randRow * 45 + specificOffset.getX()));
         }
     }
 }

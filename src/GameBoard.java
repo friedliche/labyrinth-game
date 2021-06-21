@@ -70,6 +70,10 @@ public class GameBoard extends JLayeredPane {
         }
     }
 
+    public UpperBar getInventory(){
+        return player.getInventory();
+    }
+
     private void createMaze(int width, int height){
 
         if (width < 2 || height < 2){
@@ -84,11 +88,10 @@ public class GameBoard extends JLayeredPane {
         add(grid, Integer.valueOf(1));
     }
 
-    public Collectable decideToMovePlayer(int direction){
+    public void decideToMovePlayer(int direction){
         // check for walls
         if (isNextStepPath(direction)) {
             movePlayerTo(direction);
-
 
             if (collectablesPositions.containsValue(player.getPosition())){
 
@@ -99,12 +102,15 @@ public class GameBoard extends JLayeredPane {
                         Collectable out = entry.getKey();
                         out.delete();
                         iterator.remove();
-                        return out;
+                        updateUpperBar(out);
                     }
                 }
             }
         }
-        return null;
+    }
+
+    private void updateUpperBar(Collectable out){
+        this.player.getInventory().updateUpperBar(out);
     }
 
     private void movePlayerTo(int direction){

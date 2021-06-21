@@ -11,14 +11,14 @@ public class Key extends Collectable {
     public Key(int scaleImage, boolean inGameBoard){
         super(scaleImage, "src/resources/pics/key.png", "src/resources/pics/keyHide.png", true, inGameBoard);
 
-        specificOffset = new Tuple<>(18, 36);
+        specificOffset = new Tuple<>(36, 18);
         if (inGameBoard){
             Random rand = new Random();
             int randCol = rand.nextInt(GAME_BOARD_WIDTH);
             int randRow = rand.nextInt(GAME_BOARD_HEIGHT);
 
-            setPosition(new Tuple<>(randRow, randCol));
-            setPositionVisual(new Tuple<>(randRow * 45 + specificOffset.getY(), randCol * 45 + specificOffset.getX()));
+            setPosition(new Tuple<>(randCol, randRow));
+            setPositionVisual(new Tuple<>(randCol * 45 + specificOffset.getY(), randRow * 45 + specificOffset.getX()));
         }
     }
 }
