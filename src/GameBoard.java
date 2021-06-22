@@ -26,6 +26,7 @@ public class GameBoard extends JLayeredPane {
     private Player player;
     private DynamicEnemy[] dynamicEnemies;
     private Map<Collectable, Tuple<Integer, Integer>> collectablesPositions;
+    private Exit exit;
 
     private DrawWindow currWindow;
     private int borderTop;
@@ -40,11 +41,13 @@ public class GameBoard extends JLayeredPane {
         // initialize sliding window
         this.currWindow = new DrawWindow(new Tuple<>(0, 0), width, height);
 
+        // player
         Tuple<Integer, Integer> startPosition =  new Tuple<>(10, 20);
         player = new Player(Color.CYAN,startPosition, 45);
         player.setBounds(startPosition.getX(), startPosition.getY(), 1100, 680);
         add(player, Integer.valueOf(2));
 
+        // dynamic enemies
         dynamicEnemies = new DynamicEnemy[DYNAMIC_ENEMY_COUNT];
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(DYNAMIC_ENEMY_COUNT);
         for (int i = 0; i < DYNAMIC_ENEMY_COUNT; i++){
@@ -54,6 +57,7 @@ public class GameBoard extends JLayeredPane {
             executor.scheduleAtFixedRate(dynamicEnemies[i], 0, 1, TimeUnit.SECONDS);
         }
 
+        // collectables
         collectablesPositions = new HashMap<>();
         for (int i = 0; i < KEY_COUNT; i++){
             Collectable collectable = new Key(27, true);
@@ -68,6 +72,11 @@ public class GameBoard extends JLayeredPane {
             collectablesPositions.put(collectable, collectable.getPosition());
             add(collectable, Integer.valueOf(4));
         }
+
+        // exit
+        exit = new Exit(23, 45);
+        exit.setBounds(0, 0, 1100, 680);
+        add(exit, Integer.valueOf(4));
     }
 
     public UpperBar getInventory(){
