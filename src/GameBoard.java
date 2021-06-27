@@ -103,7 +103,6 @@ public class GameBoard extends JLayeredPane {
             movePlayerTo(direction);
 
             if (collectablesPositions.containsValue(player.getPosition())){
-
                 Iterator<Map.Entry<Collectable, Tuple<Integer, Integer>>> iterator = collectablesPositions.entrySet().iterator();
                 while (iterator.hasNext()) {
                     Map.Entry<Collectable, Tuple<Integer, Integer>> entry = iterator.next();
@@ -125,6 +124,10 @@ public class GameBoard extends JLayeredPane {
                         player.handleEnemyCollision();
                     }
                 }
+            }
+
+            if (exit.getPosition().equals(this.player.getPosition())){
+                exit.handlePlayerReach(player.getKeyCount());
             }
         }
     }

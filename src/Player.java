@@ -26,6 +26,10 @@ public class Player extends JComponent{
         return this.inventory;
     }
 
+    public int getKeyCount(){
+        return this.inventory.getKeyCount();
+    }
+
     public Tuple<Integer, Integer> getPositionVisual() {
         return positionVisual;
     }

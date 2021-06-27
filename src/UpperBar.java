@@ -82,6 +82,10 @@ public class UpperBar extends JPanel {
         lifeHearts[currHeartCount++].add();
     }
 
+    public int getKeyCount(){
+        return currKeyCount;
+    }
+
     public int getWidthHearts(){
         return scaleImage * HEART_COUNT + (20 * ( HEART_COUNT - 1))  + 3 * 20;
     }

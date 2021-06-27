@@ -37,6 +37,16 @@ public class Exit extends JComponent {
         this.positionVisual = new Tuple<>(x * this.stepSize + specificOffset.getX(), y * this.stepSize + specificOffset.getY());
     }
 
+    public Tuple<Integer, Integer> getPosition(){
+        return this.position;
+    }
+
+    public void handlePlayerReach(int keyCount){
+        if (keyCount == KEY_COUNT) {
+            Game.getCl().show(Game.getCardPanel(), "winScreen");
+        }
+    }
+
     protected void paintComponent(Graphics g){
         super.paintComponent(g);
 
