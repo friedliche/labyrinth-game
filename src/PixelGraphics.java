@@ -26,7 +26,7 @@ public abstract class PixelGraphics extends JComponent {
     /**
      *  maps save polygon points for each letter
      */
-    private Map<String, int[]> xletterPolyMap = Map.ofEntries(
+    private Map<String, int[]> xLetterPolyMap = Map.ofEntries(
             entry("A", new int[]{0, 0, 1, 1, 4, 4, 5, 5, 1, 1, 4, 4, 1, 1}),
             entry("B", new int[]{1, 4, 4, 0, 0, 4, 4, 5, 5, 1, 1, 5, 5, 1}),
             entry("C", new int[]{0, 0, 5, 5, 4, 4, 1, 1, 4, 4, 5, 5, }),
@@ -48,10 +48,11 @@ public abstract class PixelGraphics extends JComponent {
             entry("V", new int[]{0, 0, 2, 2, 3, 3, 5, 5, 4, 4, 1, 1}),
             entry("W", new int[]{0, 0, 5, 5, 4, 4, 3, 3, 2, 2, 1, 1}),
             entry("X", new int[]{0, 0, 2, 2, 0, 0, 1, 1, 4, 4, 5, 5, 3, 3, 5, 5, 4, 4, 1, 1}),
-            entry("Y", new int[]{0, 0, 2, 2, 3, 3, 5, 5, 4, 4, 1, 1})
-    );
+            entry("Y", new int[]{0, 0, 2, 2, 3, 3, 5, 5, 4, 4, 1, 1}),
+            entry("-", new int[]{0, 5, 5, 0})
+            );
 
-    private Map<String, int[]> yletterPolyMap =Map.ofEntries(
+    private Map<String, int[]> yLetterPolyMap =Map.ofEntries(
             entry("A", new int[]{1, 6, 6, 4, 4, 6, 6, 1, 1, 0, 0, 3, 3, 1}),
             entry("B", new int[]{1, 1, 0, 0, 6, 6, 1, 1, 2, 2, 3, 3, 5, 5}),
             entry("C", new int[]{1, 5, 5, 4, 4, 6, 6, 0, 0, 2, 2, 1, }),
@@ -73,7 +74,8 @@ public abstract class PixelGraphics extends JComponent {
             entry("V", new int[]{0, 3, 3, 6, 6, 3, 3, 0, 0, 5, 5, 0}),
             entry("W", new int[]{0, 5, 5, 0, 0, 6, 6, 2, 2, 6, 6, 0}),
             entry("X", new int[]{0, 1, 1, 5, 5, 6, 6, 4, 4, 6, 6, 5, 5, 1, 1, 0, 0, 2, 2, 0}),
-            entry("Y", new int[]{0, 1, 1, 6, 6, 1, 1, 0, 0, 3, 3, 0})
+            entry("Y", new int[]{0, 1, 1, 6, 6, 1, 1, 0, 0, 3, 3, 0}),
+            entry("-", new int[]{2, 2, 4, 4})
     );
 
 
@@ -87,7 +89,6 @@ public abstract class PixelGraphics extends JComponent {
         int totalXOffset = xOffset;
         int totalYOffset = yOffset;
 
-        System.out.println(this.letters);
         Graphics2D g2d = (Graphics2D) g;
         g2d.setColor(this.fgColor);
 
@@ -107,13 +108,13 @@ public abstract class PixelGraphics extends JComponent {
                     String letterAsString = String.valueOf(letter);
 
                     // move letter points by offset
-                    if (!xletterPolyMap.containsKey(letterAsString) || !yletterPolyMap.containsKey(letterAsString)) {
+                    if (!xLetterPolyMap.containsKey(letterAsString) || !yLetterPolyMap.containsKey(letterAsString)) {
                         System.out.println("Missing representation of " + letterAsString + " in letters map");
                         System.exit(-1);
                     }
 
-                    int [] xletter = xletterPolyMap.get(letterAsString).clone();
-                    int [] yletter = yletterPolyMap.get(letterAsString).clone();
+                    int [] xletter = xLetterPolyMap.get(letterAsString).clone();
+                    int [] yletter = yLetterPolyMap.get(letterAsString).clone();
 
                     for (int j = 0; j < xletter.length; j++){
                         xletter[j] = (int)((xletter[j] *  this.pixelSize + totalXOffset) * this.scalingFactor);
@@ -147,7 +148,6 @@ public abstract class PixelGraphics extends JComponent {
 
     public void setyOffset(int offset){
         this.yOffset = offset;
-        System.out.println(this.yOffset);
     }
 
     public void setScalingFactor(float factor) {
