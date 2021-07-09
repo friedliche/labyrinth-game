@@ -1,14 +1,12 @@
 import org.jfugue.pattern.Pattern;
 import org.jfugue.player.Player;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
-
-import static java.util.Map.entry;
 
 public class PixelButton extends PixelGraphics implements MouseListener {
     private Dimension preferredSize = new Dimension(100, 80);
@@ -17,22 +15,18 @@ public class PixelButton extends PixelGraphics implements MouseListener {
     // default value
     private String sound = "C";
     private String linkedPanel;
+    private String letters;
 
     private ExecutorService threadPool;
     private Future<?> threadFuture;
 
-    private Map<String, String[]> nameToAttrMap = Map.ofEntries(
-         entry("START", new String[]{"C", "startScreen"}),
-         entry("SETTINGS", new String[]{"D", "settingsScreen"}),
-         entry("HELP", new String[]{"E", "helpScreen"}),
-         entry("EXIT", new String[]{"F", "exitScreen"}),
-         entry("BACK", new String[]{"G", "titleScreen"}),
-         entry("MENU", new String[]{"G", "titleScreen"})
-    );
+    private boolean isPaused;
 
     public PixelButton(String letters) {
         super(letters);
 
+        isPaused = false;
+        this.letters = letters;
         this.setScalingFactor(0.75f);
         this.setBgColor(Color.BLACK);
         this.setFgColor(Color.WHITE);
@@ -44,15 +38,19 @@ public class PixelButton extends PixelGraphics implements MouseListener {
     public PixelButton(String letters, Color bg, Color fg, Dimension dim, float scale) {
         super(letters);
 
+        isPaused = false;
+        this.letters = letters;
         this.setScalingFactor(scale);
         this.setBgColor(bg);
         this.setFgColor(fg);
         this.preferredSize.setSize(dim.width*scale, dim.height*scale);
 
-        this.setxOffset((dim.width-(letters.length()*10))/2*6);
+//        this.setxOffset((dim.width - letters.length()*10)/2*6);
+//        this.setyOffset(dim.height/2);
+        this.setxOffset(0);
         this.setyOffset(dim.height/2);
-        this.sound = nameToAttrMap.get(letters)[0];
-        this.linkedPanel = nameToAttrMap.get(letters)[1];
+        this.sound = Context.getContext().getState().getNameToAttrMap().get(letters)[0];
+        this.linkedPanel = Context.getContext().getState().getNameToAttrMap().get(letters)[1];
 
         threadPool = Game.getThreadPool();
 
@@ -63,8 +61,33 @@ public class PixelButton extends PixelGraphics implements MouseListener {
     @Override
     public void mouseClicked(MouseEvent e) {
 
+        this.sound = Context.getContext().getState().getNameToAttrMap().get(letters)[0];
+        this.linkedPanel = Context.getContext().getState().getNameToAttrMap().get(letters)[1];
+
+        PlayState playState;
         try{
             switch(this.getLetters()){
+                case "NEW GAME":
+                    JPanel cardPanel = Game.getCardPanel();
+                    synchronized (getTreeLock()){
+                        Component[] components = cardPanel.getComponents();
+                        for (Component component : components){
+                            if (component instanceof AbstractScreen && ((AbstractScreen) component).getIsPlayScreen()){
+                                cardPanel.remove(component);
+                                break;
+                            }
+                        }
+                    }
+                    cardPanel.add( new PlayScreen(), "playScreen");
+                    Game.getCl().show(cardPanel, this.linkedPanel);
+                    playState = new PlayState();
+                    playState.changeContext(Context.getContext());
+                    break;
+                case "CONTINUE":
+                    playState = new PlayState();
+                    playState.changeContext(Context.getContext());
+                    Game.getCl().show(Game.getCardPanel(), this.linkedPanel);
+                    break;
                 case "EXIT":
                     System.exit(0);
                     break;
