@@ -73,4 +73,16 @@ public class Player extends JComponent{
     public void handleEnemyCollision() {
 
     }
+
+    public void checkForLives(){
+        if (getHeartCount() <= 0) {
+            Game.getCl().show(Game.getCardPanel(), "loseScreen");
+            StartState startState = new StartState();
+            startState.changeContext(Context.getContext());
+        }
+    }
+
+    private int getHeartCount() {
+        return this.inventory.getHeartCount();
+    }
 }
