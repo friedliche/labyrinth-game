@@ -44,6 +44,8 @@ public class Exit extends JComponent {
     public void handlePlayerReach(int keyCount){
         if (keyCount == KEY_COUNT) {
             Game.getCl().show(Game.getCardPanel(), "winScreen");
+            StartState startState = new StartState();
+            startState.changeContext(Context.getContext());
         }
     }
 

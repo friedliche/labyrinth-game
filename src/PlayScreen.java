@@ -12,14 +12,18 @@ public class PlayScreen extends AbstractScreen {
     private static final int CONDITION = JComponent.WHEN_IN_FOCUSED_WINDOW;
 
     private GameBoard gameBoard;
+    private GridBagConstraints gbc;
+    private boolean firstTime;
 
     public PlayScreen() {
         super(new GridBagLayout(), 0, 10);
 
-        // upper bar
-        this.gameBoard = new GameBoard(GAME_BOARD_WIDTH, GAME_BOARD_HEIGHT);
+        firstTime = true;
+        gbc = new GridBagConstraints();
 
-        GridBagConstraints gbc = new GridBagConstraints();
+        createNewGame();
+
+        // upper bar
         gbc.anchor = GridBagConstraints.PAGE_START;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.ipadx = this.gameBoard.getInventory().getBarWidth();
@@ -29,15 +33,26 @@ public class PlayScreen extends AbstractScreen {
         gbc.weighty = 0.1f;
         add(this.gameBoard.getInventory(), gbc);
 
-        // separator
-        gbc.gridy = 1;
-        add(new JSeparator(SwingConstants.HORIZONTAL), gbc);
+        setupSeparator();
 
         gbc.gridheight = GridBagConstraints.REMAINDER;
         gbc.weighty = 0.9f;
         add(gameBoard, gbc);
 
-        // Key bindings
+
+        setupKeyBindings();
+    }
+
+    public void createNewGame(){
+        this.gameBoard = new GameBoard(GAME_BOARD_WIDTH, GAME_BOARD_HEIGHT);
+    }
+
+    private void setupSeparator(){
+        gbc.gridy = 1;
+        add(new JSeparator(SwingConstants.HORIZONTAL), gbc);
+    }
+
+    private void setupKeyBindings(){
         this.getInputMap(CONDITION).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), ESC_KEY);
         this.getInputMap(CONDITION).put(KeyStroke.getKeyStroke(KeyEvent.VK_A, 0), LEFT_KEY);
         this.getInputMap(CONDITION).put(KeyStroke.getKeyStroke(KeyEvent.VK_S, 0), DOWN_KEY);
@@ -54,7 +69,9 @@ public class PlayScreen extends AbstractScreen {
     private Action key_esc = new AbstractAction(ESC_KEY) {
         @Override
         public void actionPerformed(ActionEvent e) {
-            Game.getCl().show(Game.getCardPanel(), "titleScreen");
+            PauseState pauseState = new PauseState();
+            pauseState.changeContext(Context.getContext());
+            Game.getCl().show(Game.getCardPanel(), "pauseScreen");
         }
     };
 
