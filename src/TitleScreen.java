@@ -1,15 +1,12 @@
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 public class TitleScreen extends AbstractScreen {
 
     public TitleScreen(){
         super(new GridBagLayout());
-        setBorder(new EmptyBorder(90, 90, 10, 90));
-        setBackground(Color.BLACK);
 
-        this.setSupportedButtons(new String[]{"START", "SETTINGS", "HELP", "EXIT"});
+        this.setSupportedButtons(new String[]{"NEW GAME", "SETTINGS", "HELP", "EXIT"});
 
         GridBagConstraints gbc = new GridBagConstraints();
         setGBCForTitle(gbc);
