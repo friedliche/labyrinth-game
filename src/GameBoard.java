@@ -129,6 +129,9 @@ public class GameBoard extends JLayeredPane {
             if (exit.getPosition().equals(this.player.getPosition())){
                 exit.handlePlayerReach(player.getKeyCount());
             }
+
+            player.checkForLives();
+
         }
     }
 
@@ -155,6 +158,8 @@ public class GameBoard extends JLayeredPane {
     public String toString(){
         return this.grid.toString();
     }
+
+
 }
 
 
