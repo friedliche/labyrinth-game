@@ -20,8 +20,8 @@ public abstract class PixelGraphics extends JComponent {
     private int xOffset = 0;
     private int yOffset = 0;
 
-    private Color bgColor = Color.WHITE;
-    private Color fgColor = Color.BLACK;
+    private Color bgColor = Color.BLACK;
+    private Color fgColor = Color.WHITE;
 
     /**
      *  maps save polygon points for each letter
