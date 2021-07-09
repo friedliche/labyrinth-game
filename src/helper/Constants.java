@@ -21,5 +21,5 @@ public class Constants {
 
     public static int KEY_COUNT = 3;
     public static int HEART_COUNT = 3;
-    public static int DYNAMIC_ENEMY_COUNT = 2;
+    public static int DYNAMIC_ENEMY_COUNT = 4;
 }
