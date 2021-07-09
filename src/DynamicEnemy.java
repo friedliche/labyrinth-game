@@ -43,7 +43,7 @@ public class DynamicEnemy extends JComponent  implements Runnable{
     @Override
     public void run() {
 
-        if (!stop){
+        if (!stop && Context.getContext().getState() instanceof PlayState){
             decideToMove();
             if (collisionWithPlayer()){
                 reactToPlayerCollision();
@@ -94,5 +94,4 @@ public class DynamicEnemy extends JComponent  implements Runnable{
     public void stop(){
         this.stop = true;
     }
-
 }
