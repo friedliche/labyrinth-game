@@ -1,4 +1,3 @@
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.concurrent.ExecutorService;
@@ -11,7 +10,6 @@ public class Game {
     //create container for cards
     private static CardLayout cl;
     private static JPanel cardPanel;
-
 
     private static JFrame createJFrame(){
 
@@ -34,14 +32,20 @@ public class Game {
         SettingsScreen settingsScreenPanel = new SettingsScreen();
         HelpScreen helpScreenPanel = new HelpScreen();
         PlayScreen playScreenPanel = new PlayScreen();
+        playScreenPanel.setIsPlayScreen(true);
         WinScreen winScreenPanel = new WinScreen();
-        cardPanel.add(playScreenPanel, "playScreen");
+        LoseScreen loseScreenPanel = new LoseScreen();
+        PauseScreen pauseScreenPanel = new PauseScreen();
+        SaveScreen saveScreenPanel = new SaveScreen();
         cardPanel.add(titleScreenPanel, "titleScreen");
+        cardPanel.add(playScreenPanel, "playScreen");
         cardPanel.add(settingsScreenPanel, "settingsScreen");
         cardPanel.add(helpScreenPanel, "helpScreen");
         cardPanel.add(startScreenPanel, "startScreen");
         cardPanel.add(winScreenPanel, "winScreen");
-
+        cardPanel.add(loseScreenPanel, "loseScreen");
+        cardPanel.add(pauseScreenPanel, "pauseScreen");
+        cardPanel.add(saveScreenPanel, "saveScreen");
 
         JFrame frame = createJFrame();
         frame.add(cardPanel, BorderLayout.CENTER);
