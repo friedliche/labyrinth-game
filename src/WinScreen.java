@@ -12,7 +12,7 @@ public class WinScreen extends AbstractScreen{
 
         setGBCForTitle(gbc);
 
-        PixelText title = new PixelText("YOU WIN", 0.75f);
+        PixelText title = new PixelText("YOU WIN", 0.75f, Color.CYAN);
         add(title, gbc);
 
         setGBCForButtonPanel(gbc);
